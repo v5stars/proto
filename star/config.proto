@@ -1,0 +1,62 @@
+syntax = "proto3";
+
+package v5stars.star;
+
+message Host {
+  string address = 1; // 服务器地址
+  sint32 port = 2;    // 服务器端口
+}
+
+message Shadowsocks {
+  Host host = 1;
+  string password = 2;
+  enum CipherType {
+    UNKNOWN = 0;
+    AES_128_CFB = 1;
+    AES_256_CFB = 2;
+    CHACHA20 = 3;
+    CHACHA20_IETF = 4;
+    AES_128_GCM = 5;
+    AES_256_GCM = 6;
+    CHACHA20_POLY1305 = 7;
+    NONE = 8;
+  }
+  CipherType method = 3;
+  bool ota = 4;
+  uint32 level = 5;
+}
+
+message VMess {
+  Host host = 1;
+  string id = 2;
+  sint32 aid = 3;
+  StreamNetwork net = 4; // 'ws'|'kcp'|'tcp'|'h2'
+  string type = 5;       //伪装类型
+  string hosts = 6;      // 伪装的域名
+  string path = 7;       // ws/h2 stream path
+  string tls = 8;
+
+  enum StreamNetwork {
+    WS = 0;
+    kCP = 1;
+    TCP = 2;
+    H2 = 3;
+  }
+}
+
+message Socks { Host host = 1; }
+
+message Position {
+  sint32 x = 1;      // 唯一 id
+  sint32 y = 2;      // 顺序
+  string remark = 3; // 备注
+}
+
+message Info {
+  Position postion = 1;
+  oneof star {
+    VMess vmess = 2;
+    Shadowsocks ss = 3;
+    Socks socks = 4;
+  }
+}

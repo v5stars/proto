@@ -1,0 +1,29 @@
+syntax = "proto3";
+
+package v5stars.command;
+
+import "v5stars/star/config.proto";
+
+message StarLightUpRequest { v5stars.star.Info star = 1; }
+message StarLightUpResponse {}
+
+message StarGoneRequest {
+  string x = 1; // 唯一 id
+}
+message StarGoneResponse {}
+
+message Page {
+  sint32 cursor = 1;
+  sint32 limit = 2;
+}
+message StarListRequest { Page page = 1; }
+message StarListResponse { repeated v5stars.star.Info star = 1; }
+
+service V5stars {
+
+  rpc LightUp(StarLightUpRequest) returns (StarLightUpResponse);
+
+  rpc Gone(StarGoneRequest) returns (StarGoneResponse);
+
+  rpc List(StarListRequest) returns (StarListResponse);
+}
